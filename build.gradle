@@ -1,0 +1,29 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:7.0.2"
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+ext {
+    // 广州测试环境
+//    hostUrl = 'http://amm.easier.cn/service-openup/'
+//    bulidName = 'Beta'
+    // 外网UAT环境
+//    hostUrl = 'http://196.188.120.3:10443/service-openup/'
+//    bulidName = 'Alpha'
+    // 生产环境
+    hostUrl = "https://app.ethiomobilemoney.et:2121/service-openup/"
+    bulidName = 'Release'
+}
