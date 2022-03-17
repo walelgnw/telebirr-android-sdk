@@ -1,4 +1,4 @@
-package com.vintechplc.telebirr.bean;
+package com.vintechplc.telebirr.model;
 
 public class ResponseData {
 

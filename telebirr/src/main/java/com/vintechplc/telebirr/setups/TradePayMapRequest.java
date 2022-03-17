@@ -1,4 +1,4 @@
-package com.vintechplc.telebirr;
+package com.vintechplc.telebirr.setups;
 
 import java.util.HashMap;
 import java.util.UUID;
