@@ -66,8 +66,7 @@ public class WebViewActivitiy extends Activity {
                 if ("200".equals(tradeWebPayResponse.getCode())) {
                     if (null == tradeWebPayResponse.getData()) {
                         Log.e(TAG, "toTradeSDKPay success data is null ");
-                        Toast.makeText(WebViewActivitiy.this, "data error", Toast.LENGTH_LONG).show();
-                        return;
+                         return;
                     }
                     mWebview.loadUrl(tradeWebPayResponse.getData().getToPayUrl());
                     mWebview.evaluateJavascript("(function() { return document.getElementsByTagName('html')[0].innerHTML; })();",
@@ -75,9 +74,13 @@ public class WebViewActivitiy extends Activity {
                                 Log.d("data", html);
                             });
                 } else {
-                    Log.e(TAG, "toTradeSDKPay fail ");
-                    Toast.makeText(WebViewActivitiy.this, tradeWebPayResponse.getMsg(), Toast.LENGTH_LONG).show();
-                }
+                    PaymentResult result;
+                    result = new PaymentResult();
+                    result.setCode(-10);
+                    result.setMsg(tradeWebPayResponse.getMsg());
+                    AngolaPayUtil.getInstance().callBackPaymentResult(result);
+                    finish();
+                 }
             }
 
             @Override
@@ -88,7 +91,6 @@ public class WebViewActivitiy extends Activity {
                     result.setCode(-10);
                     result.setMsg("Network Error");
                 AngolaPayUtil.getInstance().callBackPaymentResult(result);
-                Toast.makeText(WebViewActivitiy.this, throwable.getMessage(), Toast.LENGTH_LONG).show();
                 finish();
             }
 
