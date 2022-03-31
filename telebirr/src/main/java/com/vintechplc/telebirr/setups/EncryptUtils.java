@@ -34,13 +34,7 @@ import javax.crypto.Cipher;
 class EncryptUtils {
 
     private final static String TAG = EncryptUtils.class.getName();
-
-    private final String SANDBOX_APP_KEY = "87f9e3a13749498ca9bf8ee8f5b4f423";
-    private final String PRODUCTION_APP_KEY = "6b058c0e1cd14d9fa20c00ef8dced332";
-
-    private final String SANDBOX_PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkzVFCeaZPeOQ7Mdr4/v3r/DBrycchb48+Z2oLnQgOO+fpISaBOlrC7QEwPAX78lvjIjs3h2qeQRxU7Jak/ghO5aSfFCPp7tmgt7P8GZBGMMCxmigx6P3AXH5bem+OaMTglfrVqycw//dNz2UkKeiQ/OoLiyJg+nLb7pt1P9kNYNiUmbnbiITOo2ZY+viCrasMbbpJm35zfTny6wY3nlnF6v9XMrLYzXOICG/DmxHWS9pNJWGdYYhSOfzSTZbnNBbvHxSCZq6KlM4h9Pbwbdn20qDI3mwEUEcf9jQVl8xK1MJxeQESnLEGHYi+ca05tHZWkDlvrW/zy55gX9EQ3XM6wIDAQAB";
-    private final String PRODUCTION_PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmSvHmZwuQjZbD+X6qxJZIjms4kyEo/tRJGt66F/aUkIrsoMaY/kIS+hgiUhcQi1Lem0DDCb+CHAaSf/YiiCmdhXhaSDckMgZvIzcAZhQX0pHtZhbim9G/0/ekrm7JWCq0+YJ7KF5xcWtRNyHpVKi6snpqsAVp9o8rsMHPhn4YvLZGVUapONRwtmBJ5YLJdkmMD9FU1r/B+yl8lIQjr3iVHMaCQXbEv7mF34FP9wDm5kvysSsthZ6APzJMWTswNCDIgVrbmXOvyOxd3x8PNCFkwwH4BrLxsmyDY7KnXm55oqOukeYODtG3AShnwVFDn7G/7mdI8vEURHkwbVT4SuQJwIDAQAB";
-    // rsa 2048
+  // rsa 2048
     private int RSA_PRIVATE_ENCRYPT_MAX_SIZE = 256031916;
 
 
