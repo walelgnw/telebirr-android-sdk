@@ -2,6 +2,7 @@ package com.vintechplc.telebirr.setups;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -27,16 +28,28 @@ public class WebViewActivitiy extends Activity {
     private WebView mWebview;
 
     private final String TAG = "telebirr_pr";
-
+    public static String host = "";
     private String outTradeNo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout);
-        initWebView();
-        initData();
-        AngolaPayUtil.getInstance().setWebViewActivity(this);
+        Intent intent = getIntent();
+
+        if(intent.hasExtra("host")){
+            host = intent.getStringExtra("host");
+            initWebView(host);
+            initData();
+            AngolaPayUtil.getInstance().setWebViewActivity(this);
+        }else {
+            PaymentResult result;
+            result = new PaymentResult();
+            result.setCode(-10);
+            result.setMsg("Unable to identify host address");
+            AngolaPayUtil.getInstance().callBackPaymentResult(result);
+            finish();
+        }
     }
 
     @SuppressLint("CheckResult")
@@ -101,8 +114,9 @@ public class WebViewActivitiy extends Activity {
         });
     }
 
-    private void initWebView() {
-        NetWorkManager.getInstance().init();
+    private void initWebView(String host) {
+        Log.e(TAG, "initData tradeSDKPayRequest host-> "+host);
+        NetWorkManager.getInstance().init(host);
         mWebview = findViewById(R.id.webView);
         //mWebview.setWebViewClient(new XWebViewClient());
         mWebview.setWebChromeClient(new WebChromeClient());

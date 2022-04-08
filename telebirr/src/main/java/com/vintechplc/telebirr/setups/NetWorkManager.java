@@ -26,7 +26,7 @@ class NetWorkManager {
     /**
      * 初始化必要对象和参数
      */
-    public void init() {
+    public void init(String host) {
         // 初始化okhttp
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -41,7 +41,7 @@ class NetWorkManager {
         // 初始化Retrofit
         retrofit = new Retrofit.Builder()
                 .client(client)
-                .baseUrl(AngolaRequest.PROD_HOST)
+                .baseUrl(host)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();

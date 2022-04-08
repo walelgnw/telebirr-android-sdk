@@ -49,11 +49,12 @@ public class AngolaPayUtil {
      */
 
     public void startPayment(TradePayMapRequest payMapRequest,
-                             Activity context, String appKey, String publicKey) {
+                             Activity context,String host, String appKey, String publicKey) {
         if (payMapRequest == null) {
             Log.e(TAG, "startPayment tradeWebPayRequest is null");
         }
         Intent intent = new Intent(context, WebViewActivitiy.class);
+        intent.putExtra("host",host);
         TradeSDKPayRequest request = new TradeSDKPayRequest();
         request.setAppid(payMapRequest.getAppId());
 //        String sign= EncryptUtils.getInstance().encryptSHA256(tradeWebPayRequest);

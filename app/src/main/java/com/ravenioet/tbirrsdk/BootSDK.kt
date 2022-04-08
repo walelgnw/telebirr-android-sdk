@@ -34,7 +34,7 @@ class BootSDK : AppCompatActivity() {
             val request = TradePayMapRequest()
             request.appId = payData.appId
             request.setNotifyUrl(payData.notifyUrl)
-            request.outTradeNo = payData.outTradeNo
+            request.setOutTradeNo(payData.outTradeNo)
             request.setReceiveName(payData.receiverName)
             request.setReturnUrl(payData.returnUrl)
             request.setShortCode(payData.shortCode)

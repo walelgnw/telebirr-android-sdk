@@ -20,6 +20,15 @@ public class TeleBirrPack {
     private String publicKey;
     private String outTradeNo;
     private String productionClientId;
+    private String inAppPaymentUrl;
+
+    public String getInAppPaymentUrl() {
+        return inAppPaymentUrl;
+    }
+
+    public void setInAppPaymentUrl(String inAppPaymentUrl) {
+        this.inAppPaymentUrl = inAppPaymentUrl;
+    }
 
     public String getMessage() {
         return message;

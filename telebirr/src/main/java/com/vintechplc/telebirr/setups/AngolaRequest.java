@@ -8,16 +8,14 @@ import retrofit2.http.POST;
 
 interface AngolaRequest {
 
-    // 填上需要访问的服务器地址
-//    String TEST_HOST = "http://amm.easier.cn/service-openup/";
-    String TEST_HOST = "http://196.188.120.3:10443/service-openup/";
-    String PROD_HOST = "https://app.ethiomobilemoney.et:2121/ammapi/payment/service-openup/";
+    //String TEST_HOST = "http://196.188.120.3:10443/service-openup/";
+    //String TEST_HOST = "http://196.188.120.3:11443/ammapi/service-openup/";
+
+    //String PROD_HOST = "https://app.ethiomobilemoney.et:2121/ammapi/payment/service-openup/";
 
 //    String HOST = "http://app.ethiomobilemoney.et:2121/";
 
-    //String TEST_HOST = BuildConfig.HOST_URL;
     @POST("toTradeSDKPay")
-    //@POST("toTradeMobilePay")
     Observable<TradeWebPayResponse> toTradeWebPay(@Body TradeSDKPayRequest request);
 
 }
