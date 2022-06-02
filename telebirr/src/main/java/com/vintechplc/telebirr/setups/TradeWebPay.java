@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by wgy on 2017/4/25.
  */
 
-public class TradeWebPayResponse {
+public class TradeWebPay {
 
 
     @SerializedName("code")

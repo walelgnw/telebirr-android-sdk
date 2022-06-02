@@ -12,7 +12,7 @@ import java.io.Serializable;
  * @version [V8.5.70.1, 2021/06/16]
  * @since V8.5.70.1
  */
-class TradeSDKPayRequest implements Serializable {
+class SDKPayRequest implements Serializable {
 
     @SerializedName("appid")
     private String appid;

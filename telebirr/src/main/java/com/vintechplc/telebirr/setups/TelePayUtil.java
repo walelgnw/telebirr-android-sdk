@@ -10,7 +10,7 @@ import org.json.JSONObject;
 
 import java.util.TreeMap;
 
-public class AngolaPayUtil {
+public class TelePayUtil {
 
     private final String TAG = "telebirr_";
 
@@ -18,7 +18,7 @@ public class AngolaPayUtil {
 
     public static final String OUTTRADENO = "outtradeNO";
 
-    private PaymentResultListener paymentResultListener;
+    private PaymentListener paymentListener;
 
     private Activity webViewActivity;
 
@@ -26,17 +26,17 @@ public class AngolaPayUtil {
         this.webViewActivity = webViewActivity;
     }
 
-    private static AngolaPayUtil mInstance;
+    private static TelePayUtil mInstance;
 
-    private AngolaPayUtil() {
+    private TelePayUtil() {
 
     }
 
-    public static AngolaPayUtil getInstance() {
+    public static TelePayUtil getInstance() {
         if (mInstance == null) {
-            synchronized (AngolaPayUtil.class) {
+            synchronized (TelePayUtil.class) {
                 if (mInstance == null) {
-                    mInstance = new AngolaPayUtil();
+                    mInstance = new TelePayUtil();
                 }
             }
         }
@@ -48,14 +48,14 @@ public class AngolaPayUtil {
      * 支付跳转
      */
 
-    public void startPayment(TradePayMapRequest payMapRequest,
-                             Activity context,String host, String appKey, String publicKey) {
+    public void startPayment(BuildRequest payMapRequest,
+                             Activity context, String host, String appKey, String publicKey) {
         if (payMapRequest == null) {
             Log.e(TAG, "startPayment tradeWebPayRequest is null");
         }
-        Intent intent = new Intent(context, WebViewActivitiy.class);
+        Intent intent = new Intent(context, TelePayUi.class);
         intent.putExtra("host",host);
-        TradeSDKPayRequest request = new TradeSDKPayRequest();
+        SDKPayRequest request = new SDKPayRequest();
         request.setAppid(payMapRequest.getAppId());
 //        String sign= EncryptUtils.getInstance().encryptSHA256(tradeWebPayRequest);
 //        Log.d(TAG,"startPayment Appid "+tradeWebPayRequest.getAppId()+" ,sign "+sign);
@@ -94,8 +94,8 @@ public class AngolaPayUtil {
         }
     }
 
-    public void setPaymentResultListener(PaymentResultListener paymentResultListener) {
-        this.paymentResultListener = paymentResultListener;
+    public void setPaymentResultListener(PaymentListener paymentListener) {
+        this.paymentListener = paymentListener;
         Log.d(TAG, "result listener init");
     }
 
@@ -103,9 +103,9 @@ public class AngolaPayUtil {
      * 支付结果回调
      */
     protected void callBackPaymentResult(PaymentResult result) {
-        if (paymentResultListener != null) {
+        if (paymentListener != null) {
             Log.d(TAG, "result listener found");
-            paymentResultListener.paymentResult(result);
+            paymentListener.paymentResult(result);
         }else {
             Log.d(TAG, "result listener dead");
         }

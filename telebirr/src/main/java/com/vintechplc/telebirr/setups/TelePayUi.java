@@ -11,7 +11,6 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -23,7 +22,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class WebViewActivitiy extends Activity {
+public class TelePayUi extends Activity {
 
     private WebView mWebview;
 
@@ -41,47 +40,47 @@ public class WebViewActivitiy extends Activity {
             host = intent.getStringExtra("host");
             initWebView(host);
             initData();
-            AngolaPayUtil.getInstance().setWebViewActivity(this);
+            TelePayUtil.getInstance().setWebViewActivity(this);
         }else {
             PaymentResult result;
             result = new PaymentResult();
             result.setCode(-10);
             result.setMsg("Unable to identify host address");
-            AngolaPayUtil.getInstance().callBackPaymentResult(result);
+            TelePayUtil.getInstance().callBackPaymentResult(result);
             finish();
         }
     }
 
     @SuppressLint("CheckResult")
     private void initData() {
-        Object obj = getIntent().getSerializableExtra(AngolaPayUtil.TRADESDKPAY);
+        Object obj = getIntent().getSerializableExtra(TelePayUtil.TRADESDKPAY);
         if (null == obj) {
             Log.e(TAG, "initData tradeSDKPayRequest is null");
             return;
         }
-        TradeSDKPayRequest request = (TradeSDKPayRequest) obj;
-        Object objNo = getIntent().getSerializableExtra(AngolaPayUtil.OUTTRADENO);
+        SDKPayRequest request = (SDKPayRequest) obj;
+        Object objNo = getIntent().getSerializableExtra(TelePayUtil.OUTTRADENO);
         if (null == objNo) {
             Log.e(TAG, "initData outtradeNO is null");
         }
         outTradeNo = (String) objNo;
         NetWorkManager.getInstance().getRequest().toTradeWebPay(request).subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<TradeWebPayResponse>() {
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<TradeWebPay>() {
             @Override
             public void onSubscribe(Disposable d) {
                 //Log.e(TAG, "Disposable");
             }
 
             @Override
-            public void onNext(@NonNull TradeWebPayResponse tradeWebPayResponse) {
-                Log.d(TAG, "toTradeSDKPay success code " + tradeWebPayResponse.getCode() + ", message " + tradeWebPayResponse.getMsg());
-                if ("200".equals(tradeWebPayResponse.getCode())) {
-                    if (null == tradeWebPayResponse.getData()) {
+            public void onNext(@NonNull TradeWebPay tradeWebPay) {
+                Log.d(TAG, "toTradeSDKPay success code " + tradeWebPay.getCode() + ", message " + tradeWebPay.getMsg());
+                if ("200".equals(tradeWebPay.getCode())) {
+                    if (null == tradeWebPay.getData()) {
                         Log.e(TAG, "toTradeSDKPay success data is null ");
                          return;
                     }
-                    mWebview.loadUrl(tradeWebPayResponse.getData().getToPayUrl());
+                    mWebview.loadUrl(tradeWebPay.getData().getToPayUrl());
                     mWebview.evaluateJavascript("(function() { return document.getElementsByTagName('html')[0].innerHTML; })();",
                             html -> {
                                 Log.d("data", html);
@@ -90,8 +89,8 @@ public class WebViewActivitiy extends Activity {
                     PaymentResult result;
                     result = new PaymentResult();
                     result.setCode(-10);
-                    result.setMsg(tradeWebPayResponse.getMsg());
-                    AngolaPayUtil.getInstance().callBackPaymentResult(result);
+                    result.setMsg(tradeWebPay.getMsg());
+                    TelePayUtil.getInstance().callBackPaymentResult(result);
                     finish();
                  }
             }
@@ -103,7 +102,7 @@ public class WebViewActivitiy extends Activity {
                     result = new PaymentResult();
                     result.setCode(-10);
                     result.setMsg("Network Error");
-                AngolaPayUtil.getInstance().callBackPaymentResult(result);
+                TelePayUtil.getInstance().callBackPaymentResult(result);
                 finish();
             }
 
@@ -168,7 +167,7 @@ public class WebViewActivitiy extends Activity {
                 result = new PaymentResult();
                 result.setCode(PaymentResult.SERVER_ERROR);
                 result.setMsg("server error");
-                AngolaPayUtil.getInstance().callBackPaymentResult(result);
+                TelePayUtil.getInstance().callBackPaymentResult(result);
             } else {
                 result = (PaymentResult) obj;
                 if (result.getData() != null) {
@@ -176,10 +175,10 @@ public class WebViewActivitiy extends Activity {
                 }
                 if (result.getCode() == 0) {
                     Log.d(TAG, "result code " + result.getCode());
-                    AngolaPayUtil.getInstance().callBackPaymentResult(result);
+                    TelePayUtil.getInstance().callBackPaymentResult(result);
                 }
             }
-//            AngolaPayUtil.getInstance().callBackPaymentResult(result);
+//            TelePayUtil.getInstance().callBackPaymentResult(result);
             finish();
         }
 
@@ -193,8 +192,8 @@ public class WebViewActivitiy extends Activity {
         PaymentResult result = new PaymentResult();
         result.setCode(-3);
         result.setMsg("Payment Cancelled");
-        AngolaPayUtil.getInstance().callBackPaymentResult(result);
-        AngolaPayUtil.getInstance().stopPayment();
+        TelePayUtil.getInstance().callBackPaymentResult(result);
+        TelePayUtil.getInstance().stopPayment();
         finish();
     }
 

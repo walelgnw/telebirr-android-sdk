@@ -7,8 +7,8 @@ import androidx.navigation.ui.AppBarConfiguration
 import com.ravenioet.tbirrsdk.databinding.ActivityBootSdkBinding
 import com.vintechplc.telebirr.model.PaymentResult
 import com.vintechplc.telebirr.model.TeleBirrPack
-import com.vintechplc.telebirr.setups.AngolaPayUtil
-import com.vintechplc.telebirr.setups.TradePayMapRequest
+import com.vintechplc.telebirr.setups.TelePayUtil
+import com.vintechplc.telebirr.setups.BuildRequest
 
 class BootSDK : AppCompatActivity() {
 
@@ -31,7 +31,7 @@ class BootSDK : AppCompatActivity() {
 
     fun initTeleBirrRemote(payData: TeleBirrPack?, price: String?) {
         if (payData != null) {
-            val request = TradePayMapRequest()
+            val request = BuildRequest()
             request.appId = payData.appId
             request.setNotifyUrl(payData.notifyUrl)
             request.setOutTradeNo(payData.outTradeNo)
@@ -42,8 +42,8 @@ class BootSDK : AppCompatActivity() {
             request.setTimeoutExpress(payData.timeoutExpress)
             request.setTotalAmount(price)
             if (payData.appKey != null && payData.publicKey != null) {
-                AngolaPayUtil.getInstance().startPayment(
-                    request, this, payData.appKey, payData.publicKey
+                TelePayUtil.getInstance().startPayment(
+                    request, this, payData.inAppPaymentUrl,payData.appKey, payData.publicKey
                 )
             } else {
                 val result = PaymentResult()

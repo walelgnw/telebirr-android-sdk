@@ -3,6 +3,6 @@ package com.vintechplc.telebirr.setups;
 
 import com.vintechplc.telebirr.model.PaymentResult;
 
-public interface PaymentResultListener {
+public interface PaymentListener {
      void paymentResult(PaymentResult result);
 }

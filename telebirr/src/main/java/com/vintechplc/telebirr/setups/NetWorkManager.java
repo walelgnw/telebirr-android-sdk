@@ -10,7 +10,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 class NetWorkManager {
     private static NetWorkManager mInstance;
     private Retrofit retrofit;
-    private static volatile AngolaRequest request = null;
+    private static volatile TeleRequest request = null;
 
     public static NetWorkManager getInstance() {
         if (mInstance == null) {
@@ -48,10 +48,10 @@ class NetWorkManager {
 
     }
 
-    public AngolaRequest getRequest() {
+    public TeleRequest getRequest() {
         if (request == null) {
             synchronized (NetWorkManager.class) {
-                request = retrofit.create(AngolaRequest.class);
+                request = retrofit.create(TeleRequest.class);
             }
         }
         return request;

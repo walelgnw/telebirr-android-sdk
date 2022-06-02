@@ -7,7 +7,7 @@ import java.util.UUID;
  * Created by wgy on 2017/4/25.
  */
 
-public class TradePayRequest implements Serializable {
+public class TradePay implements Serializable {
 
     private String appId;
 
@@ -33,7 +33,7 @@ public class TradePayRequest implements Serializable {
 
     private String returnApp;
 
-    public TradePayRequest(){
+    public TradePay(){
         nonce= UUID.randomUUID().toString().replaceAll("-", "");
         timestamp=String.valueOf(System.currentTimeMillis());
     }
