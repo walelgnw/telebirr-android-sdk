@@ -17,7 +17,7 @@ import java.util.UUID;
  * timestamp = '1634195036085',
  * returnApp = 'cn.easier.testswitch'
  */
-public class TradePayMapRequest extends HashMap<String, String> {
+public class BuildPayRequest extends HashMap<String, String> {
     private static final String APP_ID = "appId";
     private static final String RETURN_URL = "returnUrl";
     private static final String NOTIFY_URL = "notifyUrl";
@@ -31,12 +31,12 @@ public class TradePayMapRequest extends HashMap<String, String> {
     private static final String TIMESTAMP = "timestamp";
     private static final String RETURN_APP = "returnApp";
 
-    public TradePayMapRequest() {
+    public BuildPayRequest() {
         setNonce(UUID.randomUUID().toString().replaceAll("-", ""));
         setTimestamp(String.valueOf(System.currentTimeMillis()));
     }
 
-    public TradePayMapRequest setAppId(String v) {
+    public BuildPayRequest setAppId(String v) {
         checkValue(APP_ID, v);
         return this;
     }
@@ -45,12 +45,12 @@ public class TradePayMapRequest extends HashMap<String, String> {
         return get(APP_ID);
     }
 
-    public TradePayMapRequest setNotifyUrl(String v) {
+    public BuildPayRequest setNotifyUrl(String v) {
         checkValue(NOTIFY_URL, v);
         return this;
     }
 
-    public TradePayMapRequest setOutTradeNo(String v) {
+    public BuildPayRequest setOutTradeNo(String v) {
         checkValue(OUT_TRADE_NO, v);
         return this;
     }
@@ -59,47 +59,47 @@ public class TradePayMapRequest extends HashMap<String, String> {
         return get(OUT_TRADE_NO);
     }
 
-    public TradePayMapRequest setReceiveName(String v) {
+    public BuildPayRequest setReceiveName(String v) {
         checkValue(RECEIVE_NAME, v);
         return this;
     }
 
-    public TradePayMapRequest setReturnUrl(String v) {
+    public BuildPayRequest setReturnUrl(String v) {
         checkValue(RETURN_URL, v);
         return this;
     }
 
-    public TradePayMapRequest setShortCode(String v) {
+    public BuildPayRequest setShortCode(String v) {
         checkValue(SHORT_CODE, v);
         return this;
     }
 
-    public TradePayMapRequest setSubject(String v) {
+    public BuildPayRequest setSubject(String v) {
         checkValue(SUBJECT, v);
         return this;
     }
 
-    public TradePayMapRequest setTimeoutExpress(String v) {
+    public BuildPayRequest setTimeoutExpress(String v) {
         checkValue(TIMEOUT_EXPRESS, v);
         return this;
     }
 
-    public TradePayMapRequest setTotalAmount(String v) {
+    public BuildPayRequest setTotalAmount(String v) {
         checkValue(TOTAL_AMOUNT, v);
         return this;
     }
 
-    public TradePayMapRequest setNonce(String v) {
+    public BuildPayRequest setNonce(String v) {
         checkValue(NONCE, v);
         return this;
     }
 
-    public TradePayMapRequest setTimestamp(String v) {
+    public BuildPayRequest setTimestamp(String v) {
         checkValue(TIMESTAMP, v);
         return this;
     }
 
-    public TradePayMapRequest setReturnApp(String v) {
+    public BuildPayRequest setReturnApp(String v) {
         checkValue(RETURN_APP, v);
         return this;
     }

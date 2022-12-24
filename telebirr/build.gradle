@@ -3,11 +3,26 @@ plugins {
 }
 
 android {
-    compileSdkVersion 31
+    namespace 'com.ravenioet.telebirr'
+    signingConfigs {
+        debug {
+            storeFile file('/home/winux/Desktop/Notes/ProKeys/tbirrsdk.jks')
+            storePassword '12345678'
+            keyAlias 'tbirr'
+            keyPassword '12345678'
+        }
+        release {
+            storeFile file('/home/winux/Desktop/Notes/ProKeys/tbirrsdk.jks')
+            storePassword '12345678'
+            keyAlias 'tbirr'
+            keyPassword '12345678'
+        }
+    }
+    compileSdkVersion 33
 
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 31
+        targetSdkVersion 33
 
         buildConfigField "String", "HOST_URL", "\"${rootProject.ext.hostUrl}\""
 
@@ -17,7 +32,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }

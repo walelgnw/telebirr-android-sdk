@@ -11,23 +11,27 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.vintechplc.telebirr.R;
+import com.ravenioet.telebirr.R;
+import com.vintechplc.telebirr.logs.SessionLogger;
 import com.vintechplc.telebirr.model.PaymentResult;
+import com.vintechplc.telebirr.model.SDKPayRequest;
+import com.vintechplc.telebirr.model.WebResponse;
+import com.vintechplc.telebirr.utils.EncryptUtils;
+import com.vintechplc.telebirr.utils.PayUtil;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class WebViewActivitiy extends Activity {
+public class PayOnWeb extends Activity {
 
-    private WebView mWebview;
+    private WebView mWebView;
 
-    private final String TAG = "telebirr_pr";
+    private final String TAG = "web";
     public static String host = "";
     private String outTradeNo;
 
@@ -36,91 +40,90 @@ public class WebViewActivitiy extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout);
         Intent intent = getIntent();
-
         if(intent.hasExtra("host")){
             host = intent.getStringExtra("host");
             initWebView(host);
             initData();
-            AngolaPayUtil.getInstance().setWebViewActivity(this);
+            PayUtil.getInstance().setWebViewActivity(this);
         }else {
             PaymentResult result;
             result = new PaymentResult();
             result.setCode(-10);
             result.setMsg("Unable to identify host address");
-            AngolaPayUtil.getInstance().callBackPaymentResult(result);
+            PayUtil.getInstance().callBackPaymentResult(result);
             finish();
         }
     }
 
     @SuppressLint("CheckResult")
     private void initData() {
-        Object obj = getIntent().getSerializableExtra(AngolaPayUtil.TRADESDKPAY);
+        Object obj = getIntent().getSerializableExtra(PayUtil.TRADESDKPAY);
         if (null == obj) {
-            Log.e(TAG, "initData tradeSDKPayRequest is null");
+            SessionLogger.log(TAG, "initData tradeSDKPayRequest is null");
             return;
         }
-        TradeSDKPayRequest request = (TradeSDKPayRequest) obj;
-        Object objNo = getIntent().getSerializableExtra(AngolaPayUtil.OUTTRADENO);
+        SDKPayRequest request = (SDKPayRequest) obj;
+        Object objNo = getIntent().getSerializableExtra(PayUtil.OUTTRADENO);
         if (null == objNo) {
-            Log.e(TAG, "initData outtradeNO is null");
+            SessionLogger.log(TAG, "initData outTradeNO is null");
         }
         outTradeNo = (String) objNo;
         NetWorkManager.getInstance().getRequest().toTradeWebPay(request).subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<TradeWebPayResponse>() {
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<WebResponse>() {
             @Override
             public void onSubscribe(Disposable d) {
-                //Log.e(TAG, "Disposable");
+                SessionLogger.log(TAG, "Disposable");
             }
 
             @Override
-            public void onNext(@NonNull TradeWebPayResponse tradeWebPayResponse) {
-                Log.d(TAG, "toTradeSDKPay success code " + tradeWebPayResponse.getCode() + ", message " + tradeWebPayResponse.getMsg());
+            public void onNext(@NonNull WebResponse tradeWebPayResponse) {
+                SessionLogger.log(TAG, "toTradeSDKPay success code " + tradeWebPayResponse.getCode() + ", message " + tradeWebPayResponse.getMsg());
                 if ("200".equals(tradeWebPayResponse.getCode())) {
                     if (null == tradeWebPayResponse.getData()) {
-                        Log.e(TAG, "toTradeSDKPay success data is null ");
+                        SessionLogger.log(TAG, "toTradeSDKPay success data is null ");
                          return;
                     }
-                    mWebview.loadUrl(tradeWebPayResponse.getData().getToPayUrl());
-                    mWebview.evaluateJavascript("(function() { return document.getElementsByTagName('html')[0].innerHTML; })();",
+                    mWebView.loadUrl(tradeWebPayResponse.getData().getToPayUrl());
+                    mWebView.evaluateJavascript("(function() { return document.getElementsByTagName('html')[0].innerHTML; })();",
                             html -> {
-                                Log.d("data", html);
+                                SessionLogger.log(TAG, html);
                             });
                 } else {
                     PaymentResult result;
                     result = new PaymentResult();
                     result.setCode(-10);
                     result.setMsg(tradeWebPayResponse.getMsg());
-                    AngolaPayUtil.getInstance().callBackPaymentResult(result);
+                    PayUtil.getInstance().callBackPaymentResult(result);
                     finish();
                  }
             }
 
             @Override
             public void onError(@NonNull Throwable throwable) {
-                Log.e(TAG, "toTradeSDKPay " + throwable.getMessage());
+                SessionLogger.log(TAG, "toTradeSDKPay " + throwable.getMessage());
                 PaymentResult result;
                     result = new PaymentResult();
                     result.setCode(-10);
                     result.setMsg("Network Error");
-                AngolaPayUtil.getInstance().callBackPaymentResult(result);
+                PayUtil.getInstance().callBackPaymentResult(result);
                 finish();
             }
 
             @Override
             public void onComplete() {
-                //Log.d(TAG, "Complete");
+                SessionLogger.log(TAG, "Complete");
             }
         });
     }
 
     private void initWebView(String host) {
-        Log.e(TAG, "initData tradeSDKPayRequest host-> "+host);
+        SessionLogger.log(TAG, "initData tradeSDKPayRequest host-> "+host);
         NetWorkManager.getInstance().init(host);
-        mWebview = findViewById(R.id.webView);
+        mWebView = findViewById(R.id.webView);
         //mWebview.setWebViewClient(new XWebViewClient());
-        mWebview.setWebChromeClient(new WebChromeClient());
-        WebSettings webSettings = mWebview.getSettings();
+        mWebView.setWebChromeClient(new WebChromeClient());
+        WebSettings webSettings = mWebView.getSettings();
 
         webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
         webSettings.setJavaScriptEnabled(true);
@@ -132,7 +135,7 @@ public class WebViewActivitiy extends Activity {
         webSettings.setAllowFileAccess(false);
 
         webSettings.setDomStorageEnabled(true);
-        webSettings.setAppCacheEnabled(false);
+        mWebView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
         webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
 
         webSettings.setSupportZoom(true);
@@ -143,58 +146,55 @@ public class WebViewActivitiy extends Activity {
         webSettings.setLoadWithOverviewMode(true);
         webSettings.setPluginState(WebSettings.PluginState.ON);
 
-        mWebview.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        mWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
-        mWebview.addJavascriptInterface(new javascriptCallback(), "android");
+        mWebView.addJavascriptInterface(new javascriptCallback(), "android");
 
     }
     private class XWebViewClient extends WebViewClient{
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
-            mWebview.evaluateJavascript("(function() { return document.getElementsByTagName('html')[0].innerHTML; })();",
+            mWebView.evaluateJavascript("(function() { return document.getElementsByTagName('html')[0].innerHTML; })();",
                     html -> {
-                        Log.d("data", html);
+                        SessionLogger.log(TAG, html);
                     });
         }
     }
     public class javascriptCallback {
         @JavascriptInterface
         public void paymentResult(String jsonstr) {
-            Log.d(TAG, "paymentResult " + jsonstr);
+            SessionLogger.log(TAG, "paymentResult " + jsonstr);
             Object obj = EncryptUtils.getInstance().JSONToObj(jsonstr, PaymentResult.class);
             PaymentResult result;
             if (obj == null) {
                 result = new PaymentResult();
                 result.setCode(PaymentResult.SERVER_ERROR);
                 result.setMsg("server error");
-                AngolaPayUtil.getInstance().callBackPaymentResult(result);
+                PayUtil.getInstance().callBackPaymentResult(result);
             } else {
                 result = (PaymentResult) obj;
                 if (result.getData() != null) {
                     result.getData().setOutTradeNo(outTradeNo);
                 }
                 if (result.getCode() == 0) {
-                    Log.d(TAG, "result code " + result.getCode());
-                    AngolaPayUtil.getInstance().callBackPaymentResult(result);
+                    SessionLogger.log(TAG, "result code " + result.getCode());
+                    PayUtil.getInstance().callBackPaymentResult(result);
                 }
             }
-//            AngolaPayUtil.getInstance().callBackPaymentResult(result);
             finish();
         }
 
     }
 
-    boolean isPaymentResultSubmited = false;
-    
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         PaymentResult result = new PaymentResult();
         result.setCode(-3);
         result.setMsg("Payment Cancelled");
-        AngolaPayUtil.getInstance().callBackPaymentResult(result);
-        AngolaPayUtil.getInstance().stopPayment();
+        PayUtil.getInstance().callBackPaymentResult(result);
+        PayUtil.getInstance().stopPayment();
         finish();
     }
 

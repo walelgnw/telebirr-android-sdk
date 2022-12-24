@@ -1,12 +1,7 @@
-package com.vintechplc.telebirr.setups;
+package com.vintechplc.telebirr.model;
 
 import com.google.gson.annotations.SerializedName;
-
-/**
- * Created by wgy on 2017/4/25.
- */
-
-public class TradeWebPayResponse {
+public class WebResponse {
 
 
     @SerializedName("code")
@@ -16,7 +11,7 @@ public class TradeWebPayResponse {
     private String msg;
 
     @SerializedName("data")
-    private DataResponse data;
+    private ToPayPath data;
 
     public String getCode() {
         return code;
@@ -34,11 +29,11 @@ public class TradeWebPayResponse {
         this.msg = msg;
     }
 
-    public DataResponse getData() {
+    public ToPayPath getData() {
         return data;
     }
 
-    public void setData(DataResponse data) {
+    public void setData(ToPayPath data) {
         this.data = data;
     }
 }

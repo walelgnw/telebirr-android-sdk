@@ -1,5 +1,7 @@
 package com.vintechplc.telebirr.model;
 
+import java.util.Random;
+
 public class TeleBirrPack {
     private String message;
     private int code;
@@ -172,5 +174,25 @@ public class TeleBirrPack {
 
     public void setOutTradeNo(String outTradeNo) {
         this.outTradeNo = outTradeNo;
+    }
+    public TeleBirrPack local(){
+        Random random = new Random();
+        int randomi = random.nextInt(1000);
+        TeleBirrPack  teleBirrPack = new TeleBirrPack();
+        teleBirrPack.setCode(200);
+        teleBirrPack.setMessage("test");
+        teleBirrPack.setAppId("488c101855ed4f428452956652203161");
+        teleBirrPack.setOutTradeNo("639d59b314e685b36f27051"+randomi);
+        teleBirrPack.setReceiverName("winux");
+        teleBirrPack.setShortCode("500477");
+        teleBirrPack.setSubject("tetsting");
+        teleBirrPack.setAppKey("a4d82be4d08246cc87c9446183384562");
+        teleBirrPack.setNotifyUrl("https://mobiletransportservice.com/backend/api/credits/pay-with-telebirr");
+        teleBirrPack.setReturnUrl("com.ravenioet.tbirrsdk");
+        teleBirrPack.setPrice_etb(100);
+        teleBirrPack.setTimeoutExpress("60");
+        teleBirrPack.setPublicKey("MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzD/6Pj5V0vUGq+7nhb8GbYzf6L0AtIaDCUAVrBD3wmCkYHlEKdKkx2605wAmaeRYhkEJjpU8+mDv7i59Mg4g8/z8GRTcnBJ75+TN7YnqmuGdFboK/B7T1oZH0IqF0XULEOu2406V7FoKZlsEcMT91Kwrupe02SujKEe4tNXVgDbz5CAQHC6zcpu/hksdMaM74HMhfhhMAOUGla9JPGPbUfKWplyFjKA4b4SEq9n4qr5ulmDSNZbVjhCI6ZKj9mSAAlTOCHi7xfOtUqQDS7enGz86SEMnOJmX8AbQ3WE5GJCfNzTt3Nq/ADi3VB37wS66RaKH7qPh7ROwROcLWFcRYQIDAQAB");
+        teleBirrPack.setInAppPaymentUrl("https://app.ethiomobilemoney.et:2121/ammapi/payment/service-openup/");
+        return teleBirrPack;
     }
 }

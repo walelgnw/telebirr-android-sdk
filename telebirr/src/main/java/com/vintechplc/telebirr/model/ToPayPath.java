@@ -1,7 +1,7 @@
-package com.vintechplc.telebirr.setups;
+package com.vintechplc.telebirr.model;
 
 import com.google.gson.annotations.SerializedName;
-class DataResponse {
+public class ToPayPath {
 
    @SerializedName("toPayUrl")
    private String toPayUrl;

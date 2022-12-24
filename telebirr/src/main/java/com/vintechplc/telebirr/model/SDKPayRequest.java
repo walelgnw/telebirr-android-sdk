@@ -1,4 +1,4 @@
-package com.vintechplc.telebirr.setups;
+package com.vintechplc.telebirr.model;
 
 
 import com.google.gson.annotations.SerializedName;
@@ -12,7 +12,7 @@ import java.io.Serializable;
  * @version [V8.5.70.1, 2021/06/16]
  * @since V8.5.70.1
  */
-class TradeSDKPayRequest implements Serializable {
+public class SDKPayRequest implements Serializable {
 
     @SerializedName("appid")
     private String appid;

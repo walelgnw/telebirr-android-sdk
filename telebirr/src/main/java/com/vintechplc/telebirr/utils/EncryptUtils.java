@@ -1,4 +1,4 @@
-package com.vintechplc.telebirr.setups;
+package com.vintechplc.telebirr.utils;
 
 import android.text.TextUtils;
 import android.util.Base64;
@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.vintechplc.telebirr.logs.SessionLogger;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,48 +25,29 @@ import java.util.TreeMap;
 import javax.crypto.Cipher;
 
 
-/**
- * 功能描述
- *
- * @author liudo
- * @version [V8.5.70.1, 2021/06/01]
- * @since V8.5.70.1
- */
-class EncryptUtils {
+public class EncryptUtils {
 
-    private final static String TAG = EncryptUtils.class.getName();
+    private final static String TAG = "Encryption";
   // rsa 2048
     private int RSA_PRIVATE_ENCRYPT_MAX_SIZE = 256031916;
 
 
-    /**
-     * RSA最大加密明文大小
-     */
     private final int MAX_ENCRYPT_BLOCK = 117;
 
-
-    /**
-     * 加密算法RSA
-     */
     private final String KEY_ALGORITHM = "RSA";
 
     private final String TYPE_ENCRYRT = "RSA/None/PKCS1Padding";
-
-    private static EncryptUtils mInstance;
 
     private EncryptUtils() {
 
     }
 
+    private static final class MInstanceHolder {
+        static final EncryptUtils mInstance = new EncryptUtils();
+    }
+
     public static EncryptUtils getInstance() {
-        if (mInstance == null) {
-            synchronized (EncryptUtils.class) {
-                if (mInstance == null) {
-                    mInstance = new EncryptUtils();
-                }
-            }
-        }
-        return mInstance;
+        return MInstanceHolder.mInstance;
     }
 
 
@@ -73,11 +55,11 @@ class EncryptUtils {
         JSONObject jsonObject = objectToJson(obj);
         TreeMap<String, String> dataOptMap = JsonToMap(jsonObject);
         dataOptMap.put("appKey", /*PRODUCTION_APP_KEY*/appKey);
-        //            String key= new String(Base64.decode(KEY.getBytes(), Base64.DEFAULT));
-        String signfirst = getUrlParamsByMap(dataOptMap);
-//        Log.d(TAG, "encryptSHA256 sign first " + signfirst);
-        String sign = getSHA256Str(signfirst).toUpperCase();
-//        Log.d(TAG, "encryptSHA256 sign end " + sign);
+        //String key= new String(Base64.decode(KEY.getBytes(), Base64.DEFAULT));
+        String signFirst = getUrlParamsByMap(dataOptMap);
+      SessionLogger.log(TAG, "encryptSHA256 sign first " + signFirst);
+        String sign = getSHA256Str(signFirst).toUpperCase();
+       SessionLogger.log(TAG, "encryptSHA256 sign end " + sign);
         return sign;
     }
 
@@ -117,7 +99,7 @@ class EncryptUtils {
         return "";
     }
 
-    <T> Object JSONToObj(String jsonStr, Class<T> obj) {
+    public <T> Object JSONToObj(String jsonStr, Class<T> obj) {
         T t = null;
         ObjectMapper objectMapper = new ObjectMapper();
         try {
@@ -131,13 +113,6 @@ class EncryptUtils {
         return t;
     }
 
-
-    /**
-     * 利用java原生的摘要实现SHA256加密
-     *
-     * @param str 加密后的报文
-     * @return
-     */
     private String getSHA256Str(String str) {
         MessageDigest messageDigest;
         String encodeStr = "";
@@ -153,12 +128,6 @@ class EncryptUtils {
         return encodeStr;
     }
 
-    /**
-     * 将byte转为16进制
-     *
-     * @param bytes
-     * @return
-     */
     private String byte2Hex(byte[] bytes) {
         StringBuffer stringBuffer = new StringBuffer();
         String temp = null;
@@ -175,10 +144,10 @@ class EncryptUtils {
 
 
     public TreeMap<String, String> JsonToMap(JSONObject j) {
-        Log.d(TAG, "JsonToMap");
+        SessionLogger.log(TAG, "JsonToMap");
         TreeMap<String, String> parameters = new TreeMap<String, String>();
         if (j == null) {
-            Log.e(TAG, "JsonToMap object is null");
+            SessionLogger.log(TAG, "JsonToMap object is null");
             return parameters;
         }
         try {
@@ -199,16 +168,16 @@ class EncryptUtils {
     }
 
     private String getUrlParamsByMap(Map<String, String> map) {
-        Log.d(TAG, "getUrlParamsByMap ");
+        SessionLogger.log(TAG, "getUrlParamsByMap ");
         if (map == null || map.isEmpty()) {
-            Log.e(TAG, "getUrlParamsByMap object is null");
+            SessionLogger.log(TAG, "getUrlParamsByMap object is null");
             return "";
         }
-        Log.d(TAG, "getUrlParamsByMap  map size " + map.size());
-        StringBuffer sb = new StringBuffer();
+        SessionLogger.log(TAG, "getUrlParamsByMap  map size " + map.size());
+        StringBuilder sb = new StringBuilder();
 
         for (Map.Entry entry : map.entrySet()) {
-            sb.append(entry.getKey() + "=" + entry.getValue());
+            sb.append(entry.getKey()).append("=").append(entry.getValue());
             sb.append("&");
         }
         String s = sb.toString();
@@ -223,23 +192,12 @@ class EncryptUtils {
         return Base64.encodeToString(encryptByPublicKey(data.getBytes(), publicKey/*PRODUCTION_PUBLIC_KEY*/), Base64.NO_WRAP);
     }
 
-    /**
-     * <p>
-     * 公钥加密
-     * </p>
-     *
-     * @param data      源数据
-     * @param publicKey 公钥(BASE64编码)
-     * @return
-     * @throws Exception
-     */
     private byte[] encryptByPublicKey(byte[] data, String publicKey)
             throws Exception {
         byte[] keyBytes = Base64.decode(publicKey, Base64.NO_WRAP);
         X509EncodedKeySpec x509KeySpec = new X509EncodedKeySpec(keyBytes);
         KeyFactory keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);
         Key publicK = keyFactory.generatePublic(x509KeySpec);
-        // 对数据加密
         Cipher cipher = Cipher.getInstance(TYPE_ENCRYRT);
         cipher.init(Cipher.ENCRYPT_MODE, publicK);
         int inputLen = data.length;
@@ -247,7 +205,6 @@ class EncryptUtils {
         int offSet = 0;
         byte[] cache;
         int i = 0;
-        // 对数据分段加密
         while (inputLen - offSet > 0) {
             if (inputLen - offSet > MAX_ENCRYPT_BLOCK) {
                 cache = cipher.doFinal(data, offSet, MAX_ENCRYPT_BLOCK);
