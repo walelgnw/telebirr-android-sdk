@@ -4,17 +4,34 @@ plugins {
 }
 
 android {
-    compileSdk 31
+    namespace 'com.ravenioet.tbirrsdk'
+    signingConfigs {
+        debug {
+            storeFile file('/home/winux/Desktop/Notes/ProKeys/tbirrsdk.jks')
+            storePassword '12345678'
+            keyAlias 'tbirr'
+            keyPassword '12345678'
+        }
+        release {
+            storeFile file('/home/winux/Desktop/Notes/ProKeys/tbirrsdk.jks')
+            storePassword '12345678'
+            keyPassword '12345678'
+            keyAlias 'tbirr'
+        }
+    }
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.ravenioet.tbirrsdk"
         minSdk 21
-        targetSdk 31
+        targetSdk 33
         versionCode 3
         versionName "1.0.3"
 
         buildConfigField "String", "HOST_URL", "\"${rootProject.ext.hostUrl}\""
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        signingConfig signingConfigs.release
+        multiDexEnabled true
     }
 
     buildTypes {

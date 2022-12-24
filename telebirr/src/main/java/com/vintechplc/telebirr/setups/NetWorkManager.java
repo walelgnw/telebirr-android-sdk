@@ -1,5 +1,8 @@
 package com.vintechplc.telebirr.setups;
 
+import com.vintechplc.telebirr.interfaces.PayRequest;
+import com.vintechplc.telebirr.logs.SessionLogger;
+
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -8,26 +11,25 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 class NetWorkManager {
-    private static NetWorkManager mInstance;
+    private static volatile NetWorkManager mInstance;
     private Retrofit retrofit;
-    private static volatile TeleRequest request = null;
+    private static volatile PayRequest request = null;
 
     public static NetWorkManager getInstance() {
+        SessionLogger.log("NetWorkManager","init");
         if (mInstance == null) {
+            SessionLogger.log("NetWorkManager","creating instance");
             synchronized (NetWorkManager.class) {
-                if (mInstance == null) {
                     mInstance = new NetWorkManager();
-                }
             }
+        }else {
+            SessionLogger.log("NetWorkManager","instance found");
         }
         return mInstance;
     }
 
-    /**
-     * 初始化必要对象和参数
-     */
     public void init(String host) {
-        // 初始化okhttp
+        SessionLogger.log("NetWorkManager","init host: "+host);
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client = new OkHttpClient.Builder()
@@ -35,10 +37,10 @@ class NetWorkManager {
                 .addInterceptor(chain -> {
                     Request request = chain.request();
                     Request.Builder builder = request.newBuilder();
-                    Request req = builder.addHeader("Content-Type", "application/json").build();
+                    Request req = builder.addHeader("Content-Type",
+                            "application/json").build();
                     return chain.proceed(req);
                 }).build();
-        // 初始化Retrofit
         retrofit = new Retrofit.Builder()
                 .client(client)
                 .baseUrl(host)
@@ -48,10 +50,11 @@ class NetWorkManager {
 
     }
 
-    public TeleRequest getRequest() {
+    public PayRequest getRequest() {
+        SessionLogger.log("NetWorkManager","PayRequest init");
         if (request == null) {
             synchronized (NetWorkManager.class) {
-                request = retrofit.create(TeleRequest.class);
+                request = retrofit.create(PayRequest.class);
             }
         }
         return request;
