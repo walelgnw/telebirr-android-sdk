@@ -19,6 +19,8 @@ public interface PayRequest {
     //String HOST = "http://app.ethiomobilemoney.et:2121/";
 
     @POST("toTradeSDKPay")
+   // @POST("toTradeMobielPay")
     Observable<WebResponse> toTradeWebPay(@Body SDKPayRequest request);
+
 
 }

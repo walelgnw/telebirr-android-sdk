@@ -5,20 +5,20 @@ plugins {
 
 android {
     namespace 'com.ravenioet.tbirrsdk'
-    signingConfigs {
-        debug {
-            storeFile file('/home/winux/Desktop/Notes/ProKeys/tbirrsdk.jks')
-            storePassword '12345678'
-            keyAlias 'tbirr'
-            keyPassword '12345678'
-        }
-        release {
-            storeFile file('/home/winux/Desktop/Notes/ProKeys/tbirrsdk.jks')
-            storePassword '12345678'
-            keyPassword '12345678'
-            keyAlias 'tbirr'
-        }
-    }
+//    signingConfigs {
+//        debug {
+//            storeFile file('/home/winux/Desktop/Notes/ProKeys/tbirrsdk.jks')
+//            storePassword '12345678'
+//            keyAlias 'tbirr'
+//            keyPassword '12345678'
+//        }
+//        release {
+//            storeFile file('/home/winux/Desktop/Notes/ProKeys/tbirrsdk.jks')
+//            storePassword '12345678'
+//            keyPassword '12345678'
+//            keyAlias 'tbirr'
+//        }
+//    }
     compileSdk 33
 
     defaultConfig {
@@ -30,7 +30,7 @@ android {
 
         buildConfigField "String", "HOST_URL", "\"${rootProject.ext.hostUrl}\""
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        signingConfig signingConfigs.release
+        //signingConfig signingConfigs.release
         multiDexEnabled true
     }
 

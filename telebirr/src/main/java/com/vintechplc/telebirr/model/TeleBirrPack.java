@@ -1,8 +1,9 @@
 package com.vintechplc.telebirr.model;
 
+import java.io.Serializable;
 import java.util.Random;
 
-public class TeleBirrPack {
+public class TeleBirrPack implements Serializable {
     private String message;
     private int code;
 
@@ -20,7 +21,7 @@ public class TeleBirrPack {
     private String timeoutExpress;
     private String appKey;
     private String publicKey;
-    private String outTradeNo;
+    private String outTradeNumber;
     private String productionClientId;
     private String inAppPaymentUrl;
 
@@ -168,12 +169,12 @@ public class TeleBirrPack {
         this.price_usd = price_usd;
     }
 
-    public String getOutTradeNo() {
-        return outTradeNo;
+    public String getOutTradeNumber() {
+        return outTradeNumber;
     }
 
-    public void setOutTradeNo(String outTradeNo) {
-        this.outTradeNo = outTradeNo;
+    public void setOutTradeNumber(String outTradeNumber) {
+        this.outTradeNumber = outTradeNumber;
     }
     public TeleBirrPack local(){
         Random random = new Random();
@@ -182,7 +183,7 @@ public class TeleBirrPack {
         teleBirrPack.setCode(200);
         teleBirrPack.setMessage("test");
         teleBirrPack.setAppId("488c101855ed4f428452956652203161");
-        teleBirrPack.setOutTradeNo("639d59b314e685b36f27051"+randomi);
+        teleBirrPack.setOutTradeNumber("639d59b314e685b36f27051"+randomi);
         teleBirrPack.setReceiverName("winux");
         teleBirrPack.setShortCode("500477");
         teleBirrPack.setSubject("tetsting");
@@ -195,4 +196,45 @@ public class TeleBirrPack {
         teleBirrPack.setInAppPaymentUrl("https://app.ethiomobilemoney.et:2121/ammapi/payment/service-openup/");
         return teleBirrPack;
     }
+    public TeleBirrPack fastTime(){
+        Random random = new Random();
+        int randomi = random.nextInt(1000);
+        TeleBirrPack  teleBirrPack = new TeleBirrPack();
+        teleBirrPack.setCode(200);
+        teleBirrPack.setMessage("test");
+        teleBirrPack.setAppId("19dfaf4baee249e19e61a6412b8e2334");
+        teleBirrPack.setOutTradeNumber("19dfaf4baee249e19e61a6412b8e2334"+randomi);
+        teleBirrPack.setReceiverName("winux");
+        teleBirrPack.setShortCode("220544");
+        teleBirrPack.setSubject("tetsting");
+        teleBirrPack.setAppKey("88304d859fa8495793e66aa043ea1186");
+        teleBirrPack.setNotifyUrl("https://fasttimeexpress.net/api/v1/telebirr/notifySystem");
+        teleBirrPack.setReturnUrl("com.ravenioet.tbirrsdk");
+        teleBirrPack.setPrice_etb(100);
+        teleBirrPack.setTimeoutExpress("60");
+        teleBirrPack.setPublicKey("MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwvZQ2FRRLFYzSODSV7O+qCpRApDmvMzuaDbjakA6N9cvQKF6QCK2w4ZBftTQcfBa+JlSK1hNPGd1rmSHMGxJQJRY1h3N/wI/ZvH8cPI1Kozz6Qr/o5K9ygrFjU6V8PlWMcaALnfUhKV72/erOdNiqhpPMOfFzK1NJgXUoeI0X6s0U0famv9OlpdUOLtKqpNlGOGWjeRPupyqWMFv1YTNAmqB17kQvHsUGLYMsnKSs+8hyqLIfc1NQmCacKzdxmGgep4QCg8S1Mks0KWKdJiOP8ceTY37EP4hBc9heQdjMHbNQ5ATlW0/eCd6kT3PQ1+BMYajb0DebSTvY06JMDnXAQIDAQAB");
+        teleBirrPack.setInAppPaymentUrl("http://196.188.120.3:11443/ammapi/payment/service-openup/");
+        return teleBirrPack;
+    }
+    public TeleBirrPack tenaPlus(){
+        Random random = new Random();
+        int randomi = random.nextInt(1000);
+        TeleBirrPack  teleBirrPack = new TeleBirrPack();
+        teleBirrPack.setCode(200);
+        teleBirrPack.setMessage("test");
+        teleBirrPack.setAppId("498a8758492240cdb246080a51a0a7af");
+        teleBirrPack.setOutTradeNumber("19dfaf4baee249e19e61a6412b8e2334"+randomi);
+        teleBirrPack.setReceiverName("winux");
+        teleBirrPack.setShortCode("513071");
+        teleBirrPack.setSubject("tetsting");
+        teleBirrPack.setAppKey("d07c0af231fc409cb7ded0086fa3b59c");
+        teleBirrPack.setNotifyUrl("https://www.tenafirst.net/api/payment/notifySystem");
+        teleBirrPack.setReturnUrl("com.ravenioet.tbirrsdk");
+        teleBirrPack.setPrice_etb(100);
+        teleBirrPack.setTimeoutExpress("60");
+        teleBirrPack.setPublicKey("MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAt/oKtiZbjJF7JhnRYiFssjjcpz502aiexoFSjKbAB9w9vH9tlD5K+t60PIgE646rgGdYMOkonxT8dkI52Xyr0TzxPyG/VXcZMeocH6AW6MjE5PUUvue1JD9H334Biw857Qv7EvlI86YBdEIPsesj8bqrCYdFoUM28Eco/w/CHCOsp1BHzDtwxvygJpaStee3iomoCC+suK0taE5OFQEmJwUnxBH6FkrvgOV/nuzSp4qZcRrPZJQpAe7rMlMVW3dXNSJkVUBFRwEEfibtOX9UF8LEVxJoYJjN6g+K3oiL7AHywJlBM74QjtbSuvH/r52j7MuyHo+4araxAy+E6m2UEQIDAQAB");
+        teleBirrPack.setInAppPaymentUrl("https://app.ethiomobilemoney.et:2121/ammapi/payment/service-openup/");
+        return teleBirrPack;
+    }
+
 }
